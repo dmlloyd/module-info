@@ -1,0 +1,21 @@
+# Ignore .svn metadata files
+.svn
+ 
+#Ignore Maven generated target folders
+target
+
+# Ignore eclipse files
+.project
+.classpath
+.settings
+
+# Ignore IDEA files
+*.iml
+*.ipr
+*.iws
+/.idea
+
+.checkstyle
+dependency-reduced-pom.xml
+test-output
+tmp
