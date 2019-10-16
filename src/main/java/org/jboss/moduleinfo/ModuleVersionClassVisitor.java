@@ -28,7 +28,7 @@ public class ModuleVersionClassVisitor extends ClassVisitor {
     private final Item<String> versionItem;
 
     public ModuleVersionClassVisitor(final ClassVisitor cv, final Item<String> versionItem) {
-        super(Opcodes.ASM6, cv);
+        super(Opcodes.ASM7, cv);
         this.versionItem = versionItem;
     }
 

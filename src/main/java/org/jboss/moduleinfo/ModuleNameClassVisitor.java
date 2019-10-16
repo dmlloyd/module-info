@@ -28,7 +28,7 @@ public class ModuleNameClassVisitor extends ClassVisitor {
     private final Item<String> moduleNameItem;
 
     public ModuleNameClassVisitor(final ClassVisitor cv, final Item<String> moduleNameItem) {
-        super(Opcodes.ASM6, cv);
+        super(Opcodes.ASM7, cv);
         this.moduleNameItem = moduleNameItem;
     }
 

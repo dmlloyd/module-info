@@ -36,7 +36,7 @@ public class DelegatingModuleClassVisitor<T> extends ClassVisitor {
     }
 
     private DelegatingModuleClassVisitor(final ClassVisitor cv, final BiFunction<ModuleVisitor, T, ModuleVisitor> wrapper, T arg) {
-        super(Opcodes.ASM6, cv);
+        super(Opcodes.ASM7, cv);
         this.wrapper = wrapper;
         this.arg = arg;
     }
