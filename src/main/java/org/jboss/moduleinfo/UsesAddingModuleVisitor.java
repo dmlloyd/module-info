@@ -31,7 +31,7 @@ public class UsesAddingModuleVisitor extends ModuleVisitor {
     private final Set<String> addedNames = new HashSet<>();
 
     public UsesAddingModuleVisitor(final ModuleVisitor mv, final Set<String> usesNames) {
-        super(Opcodes.ASM6, mv);
+        super(Opcodes.ASM7, mv);
         this.usesNames = usesNames;
     }
 

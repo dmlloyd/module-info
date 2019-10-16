@@ -36,7 +36,7 @@ public class ExportAddingModuleVisitor extends ModuleVisitor {
     private final Set<String> exportedPackages = new HashSet<>();
 
     public ExportAddingModuleVisitor(final ModuleVisitor mv, final Set<String> nonExportParts) {
-        super(Opcodes.ASM6, mv);
+        super(Opcodes.ASM7, mv);
         this.nonExportParts = nonExportParts;
     }
 

@@ -26,7 +26,7 @@ import org.objectweb.asm.Opcodes;
  */
 public class LogClassVisitor extends ClassVisitor {
     public LogClassVisitor(final ClassVisitor cv) {
-        super(Opcodes.ASM6, cv);
+        super(Opcodes.ASM7, cv);
     }
 
     public LogClassVisitor() {
@@ -38,7 +38,7 @@ public class LogClassVisitor extends ClassVisitor {
         final Logger logger = Logger.getLogger();
         logger.debug("Using module name \"%s\"", name);
         if (version != null) logger.debug("Using module version \"%s\"", version);
-        return new ModuleVisitor(Opcodes.ASM6, super.visitModule(name, access, version)) {
+        return new ModuleVisitor(Opcodes.ASM7, super.visitModule(name, access, version)) {
             public void visitMainClass(final String mainClass) {
                 logger.debug("Using main-class \"%s\"", mainClass);
                 super.visitMainClass(mainClass);

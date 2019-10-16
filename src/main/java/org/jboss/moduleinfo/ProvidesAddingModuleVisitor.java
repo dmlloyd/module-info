@@ -38,7 +38,7 @@ public class ProvidesAddingModuleVisitor extends ModuleVisitor {
     private final Map<String, Set<String>> added = new HashMap<>();
 
     public ProvidesAddingModuleVisitor(final ModuleVisitor mv, final Map<String, List<String>> providesNames) {
-        super(Opcodes.ASM6, mv);
+        super(Opcodes.ASM7, mv);
         this.providesNames = providesNames;
     }
 

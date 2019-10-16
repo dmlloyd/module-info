@@ -33,7 +33,7 @@ public class PackageAddingModuleVisitor extends ModuleVisitor {
     private final Set<String> addedPackages = new HashSet<>();
 
     public PackageAddingModuleVisitor(final ModuleVisitor mv, final Collection<String> packageNames) {
-        super(Opcodes.ASM6, mv);
+        super(Opcodes.ASM7, mv);
         this.packageNames = packageNames;
     }
 
