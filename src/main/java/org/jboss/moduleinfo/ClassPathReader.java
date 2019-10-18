@@ -44,11 +44,17 @@ public class ClassPathReader {
     }
 
     public void accept(ClassPathVisitor classPathVisitor) throws IOException {
+        if ( classPathVisitor == null ) {
+            return;
+        }
         classPathVisitor.visit(path);
         final Map<String, PackageVisitor> visitedPackages = new HashMap<>();
         final Set<String> skipPackages = new HashSet<>();
         final Path path = this.path;
         final Iterator<Path> iterator;
+        if ( ! Files.exists(path)) {
+            return;
+        }
         try (Stream<Path> stream = Files.walk(path)) {
             iterator = stream.iterator();
             while (iterator.hasNext()) {
