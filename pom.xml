@@ -28,7 +28,7 @@
 
     <groupId>org.jboss.module-info</groupId>
     <artifactId>module-info</artifactId>
-    <version>1.0.Final-SNAPSHOT</version>
+    <version>1.0.Final</version>
     <packaging>maven-plugin</packaging>
 
     <name>JBoss module-info</name>
