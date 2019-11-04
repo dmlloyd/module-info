@@ -39,7 +39,7 @@ public class PackageAddingModuleVisitor extends ModuleVisitor {
 
     public void visitPackage(final String packaze) {
         addedPackages.add(packaze.replace('.', '/'));
-        super.visitPackage(packaze);
+        super.visitPackage(packaze.replace('.', '/'));
     }
 
     public void visitEnd() {
