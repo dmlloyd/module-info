@@ -46,7 +46,7 @@ public class LogClassVisitor extends ClassVisitor {
 
             public void visitPackage(final String packaze) {
                 logger.debug("Added package \"%s\"", packaze);
-                super.visitPackage(packaze);
+                super.visitPackage(packaze.replace('.', '/'));
             }
 
             public void visitRequire(final String module, final int access, final String version) {

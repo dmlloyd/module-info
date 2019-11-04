@@ -35,6 +35,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 
 /**
+ *
  */
 public class ClassPathReader {
     private final Path path;
@@ -44,7 +45,7 @@ public class ClassPathReader {
     }
 
     public void accept(ClassPathVisitor classPathVisitor) throws IOException {
-        if ( classPathVisitor == null ) {
+        if (classPathVisitor == null) {
             return;
         }
         classPathVisitor.visit(path);
@@ -52,7 +53,7 @@ public class ClassPathReader {
         final Set<String> skipPackages = new HashSet<>();
         final Path path = this.path;
         final Iterator<Path> iterator;
-        if ( ! Files.exists(path)) {
+        if (!Files.exists(path)) {
             return;
         }
         try (Stream<Path> stream = Files.walk(path)) {
@@ -74,17 +75,30 @@ public class ClassPathReader {
                                     String line;
                                     while ((line = reader.readLine()) != null) {
                                         final String name = line.replaceAll("#.*", "").trim();
-                                        if (! name.isEmpty()) {
+                                        if (!name.isEmpty()) {
                                             serviceVisitor.visitImplementation(name.replace('.', '/'));
                                         }
                                     }
                                 }
                             }
-                        } else if (fileName.toString().endsWith(".class") && ! isMetaInf) {
+                        } else if (isMetaInf && parent.getNameCount() == 2 && parent.getName(1).toString().equals("providers")) {
+                            final String implName = fileName.toString();
+                            try (BufferedReader reader = Files.newBufferedReader(item, StandardCharsets.UTF_8)) {
+                                String line;
+                                while ((line = reader.readLine()) != null) {
+                                    final String name = line.replaceAll("#.*", "").trim();
+                                    if (!name.isEmpty()) {
+                                        final ServiceVisitor serviceVisitor = classPathVisitor.visitService();
+                                        serviceVisitor.visit(name.replace('.', '/'));
+                                        serviceVisitor.visitImplementation(implName.replace('.', '/'));
+                                    }
+                                }
+                            }
+                        } else if (fileName.toString().endsWith(".class") && !isMetaInf) {
                             // it's a package
                             String packageName = parent.toString().replace('/', '.');
                             PackageVisitor packageVisitor;
-                            if (! skipPackages.contains(packageName)) {
+                            if (!skipPackages.contains(packageName)) {
                                 packageVisitor = visitedPackages.get(packageName);
                                 if (packageVisitor == null) {
                                     packageVisitor = classPathVisitor.visitPackage();

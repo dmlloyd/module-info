@@ -47,7 +47,7 @@ public class ExportAddingModuleVisitor extends ModuleVisitor {
 
     public void visitPackage(final String packaze) {
         unexportedPackages.add(packaze.replace('.', '/'));
-        super.visitPackage(packaze);
+        super.visitPackage(packaze.replace('.', '/'));
     }
 
     public void visitEnd() {

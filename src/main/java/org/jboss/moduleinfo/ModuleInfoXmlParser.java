@@ -139,7 +139,7 @@ public class ModuleInfoXmlParser implements ClassVisitable<Exception> {
             } else {
                 break;
             }
-            eventType = reader.getEventType();
+            eventType = reader.nextTag();
         }
         moduleVisitor.visitEnd();
         while (eventType == START_ELEMENT && reader.getLocalName().equals("annotation")) {
@@ -237,11 +237,11 @@ public class ModuleInfoXmlParser implements ClassVisitable<Exception> {
             modules = null;
         }
         if (open) {
-            moduleVisitor.visitOpen(packageName, flags, modules);
+            moduleVisitor.visitOpen(packageName.replace('.', '/'), flags, modules);
         } else {
-            moduleVisitor.visitExport(packageName, flags, modules);
+            moduleVisitor.visitExport(packageName.replace('.', '/'), flags, modules);
         }
-        if (reader.nextTag() != END_ELEMENT) throw unknownContent(reader);
+        if (reader.getEventType() != END_ELEMENT) throw unknownContent(reader);
     }
 
     private void parseProvideType(final XMLStreamReader reader, final ModuleVisitor moduleVisitor) throws XMLStreamException {
