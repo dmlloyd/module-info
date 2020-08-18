@@ -1,0 +1,34 @@
+name: io.smallrye.module-info
+mainClass: io.smallrye.moduleinfo.ModuleInfoCreator
+opens:
+  - package: io.smallrye.moduleinfo
+# these packages are private/shaded in
+packages:
+  - io.smallrye.moduleinfo.org.objectweb.asm
+  - io.smallrye.moduleinfo.org.objectweb.asm.signature
+  - io.smallrye.moduleinfo.org.objectweb.asm.tree
+  - io.smallrye.moduleinfo.org.objectweb.asm.tree.analysis
+  - io.smallrye.moduleinfo.com.beust.jcommander
+  - io.smallrye.moduleinfo.com.beust.jcommander.converters
+  - io.smallrye.moduleinfo.com.beust.jcommander.defaultprovider
+  - io.smallrye.moduleinfo.com.beust.jcommander.internal
+  - io.smallrye.moduleinfo.com.beust.jcommander.validators
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.composer
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.constructor
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.emitter
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.env
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.error
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.events
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.extensions
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.external.com.google.gdata.util.common.base
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.introspector
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.nodes
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.parser
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.reader
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.representer
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.resolver
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.scanner
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.serializer
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.tokens
+  - io.smallrye.moduleinfo.org.yaml.snakeyaml.util

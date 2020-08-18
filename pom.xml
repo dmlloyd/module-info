@@ -26,22 +26,23 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.jboss.module-info</groupId>
+    <groupId>io.smallrye.module-info</groupId>
     <artifactId>module-info</artifactId>
-    <version>1.1.Final-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
-    <name>JBoss module-info</name>
-    <description>A utility for writing module-info.class files based on XML and automatic input</description>
+    <name>SmallRye Module Info</name>
+    <description>A utility for writing module-info.class files based on YAML and automatic input</description>
     <parent>
-        <groupId>org.jboss</groupId>
-        <artifactId>jboss-parent</artifactId>
+        <groupId>io.smallrye</groupId>
+        <artifactId>smallrye-parent</artifactId>
         <version>23</version>
     </parent>
 
     <properties>
         <!-- Dependency versions -->
         <version.junit.junit>4.11</version.junit.junit>
+        <version.com.beust.jcommander>1.72</version.com.beust.jcommander>
         <version.org.apache.maven.maven-plugin>2.2.1</version.org.apache.maven.maven-plugin>
         <version.org.apache.maven.maven-settings>3.0.5</version.org.apache.maven.maven-settings>
         <version.org.apache.maven.plugin-api>3.0.5</version.org.apache.maven.plugin-api>
@@ -51,6 +52,8 @@
         <version.org.apache.maven.plugins.maven-dependency-plugin>2.6</version.org.apache.maven.plugins.maven-dependency-plugin>
         <version.org.apache.maven.shared.maven-filtering>1.1</version.org.apache.maven.shared.maven-filtering>
         <version.org.codehaus.plexus.plexus-utils>3.0.10</version.org.codehaus.plexus.plexus-utils>
+        <version.org.ow2.asm>7.2</version.org.ow2.asm>
+        <version.org.yaml.snakeyaml>1.26</version.org.yaml.snakeyaml>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -72,7 +75,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.jboss.moduleinfo.ModuleInfoCreator</mainClass>
+                            <mainClass>io.smallrye.moduleinfo.ModuleInfoCreator</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -106,6 +109,7 @@
                                 <includes>
                                     <include>org.ow2.asm:*</include>
                                     <include>com.beust:jcommander</include>
+                                    <include>org.yaml:snakeyaml</include>
                                 </includes>
                             </artifactSet>
                             <filters>
@@ -121,15 +125,25 @@
                                         <exclude>module-info.class</exclude>
                                     </excludes>
                                 </filter>
+                                <filter>
+                                    <artifact>org.yaml:snakeyaml</artifact>
+                                    <excludes>
+                                        <exclude>module-info.class</exclude>
+                                    </excludes>
+                                </filter>
                             </filters>
                             <relocations>
                                 <relocation>
                                     <pattern>org.objectweb.asm</pattern>
-                                    <shadedPattern>org.jboss.moduleinfo.org.objectweb.asm</shadedPattern>
+                                    <shadedPattern>io.smallrye.moduleinfo.org.objectweb.asm</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>com.beust.jcommander</pattern>
-                                    <shadedPattern>org.jboss.moduleinfo.com.beust.jcommander</shadedPattern>
+                                    <shadedPattern>io.smallrye.moduleinfo.com.beust.jcommander</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.yaml.snakeyaml</pattern>
+                                    <shadedPattern>io.smallrye.moduleinfo.org.yaml.snakeyaml</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -163,7 +177,7 @@
                             <goal>helpmojo</goal>
                         </goals>
                         <configuration>
-                            <helpPackageName>org.jboss.moduleinfo</helpPackageName>
+                            <helpPackageName>io.smallrye.moduleinfo</helpPackageName>
                         </configuration>
                     </execution>
                 </executions>
@@ -171,26 +185,70 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>bootstrap</id>
+            <activation>
+                <property>
+                    <name>!bootstrap</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>${project.artifactId}</artifactId>
+                        <version>${project.version}</version>
+                        <executions>
+                            <execution>
+                                <id>module-info</id>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <addExports>false</addExports>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>re-add-missing</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>re-add</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm</artifactId>
-            <version>7.2</version>
+            <version>${version.org.ow2.asm}</version>
         </dependency>
         <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm-tree</artifactId>
-            <version>7.2</version>
+            <version>${version.org.ow2.asm}</version>
         </dependency>
         <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm-analysis</artifactId>
-            <version>7.2</version>
+            <version>${version.org.ow2.asm}</version>
         </dependency>
         <dependency>
             <groupId>com.beust</groupId>
             <artifactId>jcommander</artifactId>
-            <version>1.72</version>
+            <version>${version.com.beust.jcommander}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>${version.org.yaml.snakeyaml}</version>
         </dependency>
 
         <!-- maven plugin dependencies -->

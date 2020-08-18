@@ -19,3 +19,4 @@ target
 dependency-reduced-pom.xml
 test-output
 tmp
+.cache
