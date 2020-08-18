@@ -241,9 +241,6 @@ The following properties are supported by the single `generate` goal, which is b
 | `<classesDirectory>` | `File` | `1.0` | The directory where class files can be read from.
 
 *Default value is*: `${project.build.outputDirectory}`
-| `<moduleInfoYml>` | `File` | `1.0` | The path to the `module-info.yml` file.
-
-*Default value is*: `${project.build.sourceDirectory}/module-info.yml`
 | `<moduleArtifactId>` | `String` | `1.0` | The artifact ID to use to generate a module name, if none is given.
 
 *Default value is*: `${project.artifactId}`
@@ -256,6 +253,9 @@ The following properties are supported by the single `generate` goal, which is b
 .Maven optional parameters
 |===
 | Name | Type | Since | Description
+| `<moduleInfoYml>` | `File` | `1.0` | The path to the `module-info.yml` file.
+
+*Default value is*: `${project.build.sourceDirectory}/module-info.yml`
 | `<skip>` | `boolean` | `1.0` | If set to `true`, the plugin is skipped; generally useful for overriding behavior from the command line.
 
 *Default value is*: `false`

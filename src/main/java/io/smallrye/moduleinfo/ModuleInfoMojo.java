@@ -36,7 +36,7 @@ public class ModuleInfoMojo extends AbstractMojo {
     /**
      * The path to the module-info.yml file.
      */
-    @Parameter(defaultValue = "${project.build.sourceDirectory}/module-info.yml", required = true)
+    @Parameter(defaultValue = "${project.build.sourceDirectory}/module-info.yml")
     private File moduleInfoYml;
 
     @Parameter(defaultValue = "true", property = "module-info.add-packages")
@@ -77,7 +77,7 @@ public class ModuleInfoMojo extends AbstractMojo {
         final ModuleInfoCreator creator = new ModuleInfoCreator();
         creator.setOutputDirectory(outputDirectory.toPath());
         creator.setClassesPaths(Collections.singletonList(classesDirectory.toPath()));
-        if (!moduleInfoYml.toString().isEmpty()) {
+        if (moduleInfoYml != null && !moduleInfoYml.toString().isEmpty() && moduleInfoYml.exists()) {
             creator.setModuleInfoYml(moduleInfoYml.toPath());
         }
         creator.setAddPackages(addPackages);
