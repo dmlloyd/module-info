@@ -191,7 +191,7 @@ Or like this:
 
 [source,shell script]
 ----
-java -p <path-to-directory-with-module-info.jar> -m io.smallrye.module-info [OPTION]...
+java -p <path-to-directory-with-module-info.jar> -m io.github.dmlloyd.module-info [OPTION]...
 ----
 
 The following command-line options are supported:
@@ -218,7 +218,7 @@ The following command-line options are supported:
 
 The Maven artifact of this project also serves as a Maven plugin which will process your compiled project
 to produce the `module-info.class` file in the project output directory.  The current version can be found at
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.smallrye.module-info/module-info/badge.png)](https://maven-badges.herokuapp.com/maven-central/io.smallrye.module-info/module-info).
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.dmlloyd.module-info/module-info/badge.png)](https://maven-badges.herokuapp.com/maven-central/io.github.dmlloyd.module-info/module-info).
 
 The plugin will dynamically determine the correct descriptor values for most simple projects, including using a simple
 algorithm to derive a suitable module name from the project group and artifact ID, but the configuration can be fine-tuned
@@ -306,7 +306,7 @@ Add a snippet like this to your `pom.xml` to get started:
     <build>
         <plugins>
             <plugin>
-                <groupId>io.smallrye.module-info</groupId>
+                <groupId>io.github.dmlloyd.module-info</groupId>
                 <artifactId>module-info</artifactId>
                 <version>1.0.0</version>
                 <executions>
