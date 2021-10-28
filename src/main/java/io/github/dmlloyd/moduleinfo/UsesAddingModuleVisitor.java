@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.objectweb.asm.ModuleVisitor;
-import org.objectweb.asm.Opcodes;
 
 /**
  */
@@ -13,7 +12,7 @@ public class UsesAddingModuleVisitor extends ModuleVisitor {
     private final Set<String> addedNames = new HashSet<>();
 
     public UsesAddingModuleVisitor(final ModuleVisitor mv, final Set<String> usesNames) {
-        super(Opcodes.ASM7, mv);
+        super(ModuleInfoCreator.ASM_VERSION, mv);
         this.usesNames = usesNames;
     }
 

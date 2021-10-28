@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.objectweb.asm.ModuleVisitor;
-import org.objectweb.asm.Opcodes;
 
 /**
  * A module visitor that adds the given list of packages as exports.
@@ -18,7 +17,7 @@ public class ExportAddingModuleVisitor extends ModuleVisitor {
     private final Set<String> exportedPackages = new HashSet<>();
 
     public ExportAddingModuleVisitor(final ModuleVisitor mv, final Set<String> nonExportParts) {
-        super(Opcodes.ASM7, mv);
+        super(ModuleInfoCreator.ASM_VERSION, mv);
         this.nonExportParts = nonExportParts;
     }
 

@@ -23,7 +23,7 @@ public class UsesClassVisitor extends ClassVisitor {
     private final Set<String> usesNames;
 
     public UsesClassVisitor(final ClassVisitor cv, final Set<String> usesNames) {
-        super(Opcodes.ASM7, cv);
+        super(ModuleInfoCreator.ASM_VERSION, cv);
         this.usesNames = usesNames;
     }
 
@@ -35,11 +35,11 @@ public class UsesClassVisitor extends ClassVisitor {
     public MethodVisitor visitMethod(final int access, final String name, final String desc, final String signature,
             final String[] exceptions) {
         final MethodVisitor omv = super.visitMethod(access, name, desc, signature, exceptions);
-        return new MethodNode(Opcodes.ASM7, access, name, desc, signature, exceptions) {
+        return new MethodNode(ModuleInfoCreator.ASM_VERSION, access, name, desc, signature, exceptions) {
             public void visitEnd() {
                 if (instructions.size() > 0)
                     try {
-                        Analyzer<BasicValue> a = new Analyzer<>(new BasicInterpreter(Opcodes.ASM7) {
+                        Analyzer<BasicValue> a = new Analyzer<>(new BasicInterpreter(ModuleInfoCreator.ASM_VERSION) {
                             public BasicValue newOperation(final AbstractInsnNode insn) throws AnalyzerException {
                                 if (insn instanceof LdcInsnNode) {
                                     final Object cst = ((LdcInsnNode) insn).cst;

@@ -2,7 +2,6 @@ package io.github.dmlloyd.moduleinfo;
 
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ModuleVisitor;
-import org.objectweb.asm.Opcodes;
 
 /**
  */
@@ -10,7 +9,7 @@ public class DefaultModuleNameClassVisitor extends ClassVisitor {
     private final String moduleName;
 
     public DefaultModuleNameClassVisitor(final ClassVisitor cv, final String moduleName) {
-        super(Opcodes.ASM7, cv);
+        super(ModuleInfoCreator.ASM_VERSION, cv);
         this.moduleName = moduleName;
     }
 

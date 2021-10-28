@@ -22,6 +22,7 @@ import javax.xml.stream.XMLStreamException;
 
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -32,6 +33,8 @@ import com.beust.jcommander.converters.PathConverter;
  */
 @Parameters(separators = "=")
 public class ModuleInfoCreator {
+    static final int ASM_VERSION = Opcodes.ASM9;
+
     @Parameter(names = { "--module-info-yml", "-i" }, converter = PathConverter.class)
     private Path moduleInfoYml;
     @Parameter(names = { "--output-dir", "-o" }, required = true, converter = PathConverter.class)

@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.objectweb.asm.ModuleVisitor;
-import org.objectweb.asm.Opcodes;
 
 /**
  * A module visitor that adds the given list of packages.
@@ -15,7 +14,7 @@ public class PackageAddingModuleVisitor extends ModuleVisitor {
     private final Set<String> addedPackages = new HashSet<>();
 
     public PackageAddingModuleVisitor(final ModuleVisitor mv, final Collection<String> packageNames) {
-        super(Opcodes.ASM7, mv);
+        super(ModuleInfoCreator.ASM_VERSION, mv);
         this.packageNames = packageNames;
     }
 

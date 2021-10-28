@@ -5,7 +5,6 @@ import java.util.function.Function;
 
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ModuleVisitor;
-import org.objectweb.asm.Opcodes;
 
 /**
  */
@@ -15,7 +14,7 @@ public class DelegatingModuleClassVisitor<T> extends ClassVisitor {
 
     private DelegatingModuleClassVisitor(final ClassVisitor cv, final BiFunction<ModuleVisitor, T, ModuleVisitor> wrapper,
             T arg) {
-        super(Opcodes.ASM7, cv);
+        super(ModuleInfoCreator.ASM_VERSION, cv);
         this.wrapper = wrapper;
         this.arg = arg;
     }

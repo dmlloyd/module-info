@@ -13,7 +13,7 @@ public class MandatoryAddingModuleVisitor extends ModuleVisitor {
     }
 
     public MandatoryAddingModuleVisitor(final ModuleVisitor mv) {
-        this(Opcodes.ASM7, mv);
+        this(ModuleInfoCreator.ASM_VERSION, mv);
     }
 
     public void visitRequire(final String module, final int access, final String version) {

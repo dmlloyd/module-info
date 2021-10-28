@@ -2,13 +2,12 @@ package io.github.dmlloyd.moduleinfo;
 
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ModuleVisitor;
-import org.objectweb.asm.Opcodes;
 
 /**
  */
 public class LogClassVisitor extends ClassVisitor {
     public LogClassVisitor(final ClassVisitor cv) {
-        super(Opcodes.ASM7, cv);
+        super(ModuleInfoCreator.ASM_VERSION, cv);
     }
 
     public LogClassVisitor() {
@@ -23,7 +22,7 @@ public class LogClassVisitor extends ClassVisitor {
         if (version != null) {
             logger.info("Using module version \"%s\"", version);
         }
-        return new ModuleVisitor(Opcodes.ASM7, super.visitModule(name, access, version)) {
+        return new ModuleVisitor(ModuleInfoCreator.ASM_VERSION, super.visitModule(name, access, version)) {
             public void visitMainClass(final String mainClass) {
                 logger.debug("Using main-class \"%s\"", mainClass);
                 super.visitMainClass(mainClass);

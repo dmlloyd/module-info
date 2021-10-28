@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.objectweb.asm.ModuleVisitor;
-import org.objectweb.asm.Opcodes;
 
 /**
  */
@@ -20,7 +19,7 @@ public class ProvidesAddingModuleVisitor extends ModuleVisitor {
     private final Map<String, Set<String>> added = new HashMap<>();
 
     public ProvidesAddingModuleVisitor(final ModuleVisitor mv, final Map<String, List<String>> providesNames) {
-        super(Opcodes.ASM7, mv);
+        super(ModuleInfoCreator.ASM_VERSION, mv);
         this.providesNames = providesNames;
     }
 
