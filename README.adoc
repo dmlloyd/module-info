@@ -308,7 +308,7 @@ Add a snippet like this to your `pom.xml` to get started:
             <plugin>
                 <groupId>io.github.dmlloyd.module-info</groupId>
                 <artifactId>module-info</artifactId>
-                <version>1.0.0</version>
+                <version>1.2</version>
                 <executions>
                     <execution>
                         <id>module-info</id>
