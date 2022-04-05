@@ -1,6 +1,7 @@
 package io.github.dmlloyd.moduleinfo;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -79,7 +80,7 @@ public class ClassPathReader {
                             }
                         } else if (fileName.toString().endsWith(".class") && !isMetaInf) {
                             // it's a package
-                            String packageName = parent.toString().replace('/', '.');
+                            String packageName = parent.toString().replace(File.separatorChar, '.').replace('/', '.');
                             PackageVisitor packageVisitor;
                             if (!skipPackages.contains(packageName)) {
                                 packageVisitor = visitedPackages.get(packageName);
