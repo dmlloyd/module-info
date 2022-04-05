@@ -72,9 +72,7 @@ public class ModuleInfoYmlParser implements ClassVisitable<Exception> {
         if (sourceFile == null) {
             sourceFile = moduleInfoYml.getFileName().toString();
         }
-        if (sourceFile != null) {
-            cv.visitSource(sourceFile, null);
-        }
+        cv.visitSource(sourceFile, null);
         final ModuleVisitor moduleVisitor = cv.visitModule(name, flags, version);
         String mainClass = moduleInfo.getMainClass();
         if (mainClass != null) {
