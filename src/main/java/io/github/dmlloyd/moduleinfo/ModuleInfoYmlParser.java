@@ -19,7 +19,7 @@ import org.yaml.snakeyaml.Yaml;
 /**
  * A {@code module-info.yml} parser.
  */
-public class ModuleInfoYmlParser implements ClassVisitable<Exception> {
+public class ModuleInfoYmlParser {
     private static final String[] NO_STRINGS = new String[0];
     private final Path moduleInfoYml;
 
@@ -81,9 +81,9 @@ public class ModuleInfoYmlParser implements ClassVisitable<Exception> {
                 moduleVisitor.visitPackage(packageName.replace('.', '/'));
             }
         }
-        List<ModuleInfoYml.Export> exports = moduleInfo.getExports();
+        List<ModuleExport> exports = moduleInfo.getExports();
         if (exports != null) {
-            for (ModuleInfoYml.Export export : exports) {
+            for (ModuleExport export : exports) {
                 flags = 0;
                 if (export.isSynthetic()) {
                     flags |= Opcodes.ACC_SYNTHETIC;
@@ -96,9 +96,9 @@ public class ModuleInfoYmlParser implements ClassVisitable<Exception> {
                         exportTo == null ? null : exportTo.toArray(NO_STRINGS));
             }
         }
-        List<ModuleInfoYml.Export> opens = moduleInfo.getOpens();
+        List<ModuleExport> opens = moduleInfo.getOpens();
         if (opens != null) {
-            for (ModuleInfoYml.Export export : opens) {
+            for (ModuleExport export : opens) {
                 flags = 0;
                 if (export.isSynthetic()) {
                     flags |= Opcodes.ACC_SYNTHETIC;
@@ -117,9 +117,9 @@ public class ModuleInfoYmlParser implements ClassVisitable<Exception> {
                 moduleVisitor.visitUse(use.replace('.', '/'));
             }
         }
-        List<ModuleInfoYml.Require> requires = moduleInfo.getRequires();
+        List<ModuleRequire> requires = moduleInfo.getRequires();
         if (requires != null) {
-            for (ModuleInfoYml.Require require : requires) {
+            for (ModuleRequire require : requires) {
                 flags = 0;
                 if (require.isSynthetic()) {
                     flags |= Opcodes.ACC_SYNTHETIC;
@@ -136,9 +136,9 @@ public class ModuleInfoYmlParser implements ClassVisitable<Exception> {
                 moduleVisitor.visitRequire(require.getModule(), flags, require.getVersion());
             }
         }
-        List<ModuleInfoYml.Provide> provides = moduleInfo.getProvides();
+        List<ModuleProvide> provides = moduleInfo.getProvides();
         if (provides != null) {
-            for (ModuleInfoYml.Provide provide : provides) {
+            for (ModuleProvide provide : provides) {
                 List<String> with = provide.getWith();
                 if (with != null) {
                     moduleVisitor.visitProvide(provide.getServiceType().replace('.', '/'),
@@ -146,9 +146,9 @@ public class ModuleInfoYmlParser implements ClassVisitable<Exception> {
                 }
             }
         }
-        List<ModuleInfoYml.Annotation> annotations = moduleInfo.getAnnotations();
+        List<ModuleAnnotation> annotations = moduleInfo.getAnnotations();
         if (annotations != null) {
-            for (ModuleInfoYml.Annotation annotation : annotations) {
+            for (ModuleAnnotation annotation : annotations) {
                 processAnnotation(cv, annotation);
             }
         }
@@ -156,13 +156,13 @@ public class ModuleInfoYmlParser implements ClassVisitable<Exception> {
         cv.visitEnd();
     }
 
-    private void processAnnotation(final ClassVisitor cv, final ModuleInfoYml.Annotation annotation) {
+    private void processAnnotation(final ClassVisitor cv, final ModuleAnnotation annotation) {
         AnnotationVisitor annotationVisitor = cv.visitAnnotation(annotation.getType().replace('.', '/'),
                 annotation.isVisible());
         processAnnotation(annotation, annotationVisitor);
     }
 
-    private void processAnnotation(final ModuleInfoYml.Annotation annotation, final AnnotationVisitor annotationVisitor) {
+    private void processAnnotation(final ModuleAnnotation annotation, final AnnotationVisitor annotationVisitor) {
         Map<String, Object> values = annotation.getValues();
         if (values != null) {
             for (Map.Entry<String, Object> entry : values.entrySet()) {
@@ -171,22 +171,22 @@ public class ModuleInfoYmlParser implements ClassVisitable<Exception> {
         }
     }
 
-    private void processAnnotationValue(final ModuleInfoYml.Annotation annotation, final AnnotationVisitor visitor,
+    private void processAnnotationValue(final ModuleAnnotation annotation, final AnnotationVisitor visitor,
             final String name, final Object value) {
         if (value instanceof Number || value instanceof String) {
             visitor.visit(name, value);
         } else if (value instanceof List) {
             AnnotationVisitor arrayVisitor = visitor.visitArray(name);
             processAnnotationValues(annotation, arrayVisitor, (List<?>) value);
-        } else if (value instanceof ModuleInfoYml.Annotation) {
-            ModuleInfoYml.Annotation ann = (ModuleInfoYml.Annotation) value;
+        } else if (value instanceof ModuleAnnotation) {
+            ModuleAnnotation ann = (ModuleAnnotation) value;
             processAnnotation(ann, visitor.visitAnnotation(name, "L" + ann.getType().replace('.', '/') + ";"));
         } else {
             throw new IllegalArgumentException("Unsupported annotation value type: " + value.getClass());
         }
     }
 
-    private void processAnnotationValues(final ModuleInfoYml.Annotation annotation, final AnnotationVisitor visitor,
+    private void processAnnotationValues(final ModuleAnnotation annotation, final AnnotationVisitor visitor,
             final List<?> list) {
         for (Object value : list) {
             processAnnotationValue(annotation, visitor, null, value);
