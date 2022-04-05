@@ -55,9 +55,6 @@ public class ModuleInfoYmlParser implements ClassVisitable<Exception> {
         boolean open = moduleInfo.isOpen();
         boolean synthetic = moduleInfo.isSynthetic();
         boolean mandated = moduleInfo.isMandated();
-        if (name == null) {
-            throw new IllegalArgumentException("No module name given");
-        }
         int flags = 0;
         if (open) {
             flags |= Opcodes.ACC_OPEN;
