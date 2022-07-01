@@ -51,7 +51,7 @@
         <version.org.apache.maven.plugins.site-plugin>3.2</version.org.apache.maven.plugins.site-plugin>
         <version.org.apache.maven.plugins.maven-dependency-plugin>2.6</version.org.apache.maven.plugins.maven-dependency-plugin>
         <version.org.apache.maven.shared.maven-filtering>1.1</version.org.apache.maven.shared.maven-filtering>
-        <version.org.codehaus.plexus.plexus-utils>3.0.10</version.org.codehaus.plexus.plexus-utils>
+        <version.org.codehaus.plexus.plexus-utils>3.0.16</version.org.codehaus.plexus.plexus-utils>
         <version.org.ow2.asm>9.2</version.org.ow2.asm>
         <version.org.yaml.snakeyaml>1.26</version.org.yaml.snakeyaml>
 
