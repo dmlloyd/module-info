@@ -35,8 +35,8 @@
     <description>A utility for writing module-info.class files based on YAML and automatic input</description>
     <parent>
         <groupId>io.smallrye</groupId>
-        <artifactId>smallrye-parent</artifactId>
-        <version>23</version>
+        <artifactId>smallrye-build-parent</artifactId>
+        <version>38</version>
     </parent>
 
     <properties>
