@@ -706,7 +706,7 @@ public class ModuleInfoCreator {
 
     private void readClassPathClassFile(final Path basePath, final Path path) throws IOException {
         Path parent = path.getParent();
-        int cnt = parent.getNameCount();
+        int cnt = parent == null ? 0 : parent.getNameCount();
         if (cnt > 0) {
             StringBuilder b = new StringBuilder(64);
             b.append(parent.getName(0));
