@@ -42,7 +42,7 @@
     <properties>
         <!-- Dependency versions -->
         <version.junit.junit>4.11</version.junit.junit>
-        <version.com.beust.jcommander>1.72</version.com.beust.jcommander>
+        <version.com.beust.jcommander>1.82</version.com.beust.jcommander>
         <version.org.apache.maven.maven-plugin>2.2.1</version.org.apache.maven.maven-plugin>
         <version.org.apache.maven.maven-settings>3.0.5</version.org.apache.maven.maven-settings>
         <version.org.apache.maven.plugin-api>3.0.5</version.org.apache.maven.plugin-api>
