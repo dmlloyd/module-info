@@ -45,7 +45,7 @@
         <version.com.beust.jcommander>1.82</version.com.beust.jcommander>
         <version.org.apache.maven.maven-plugin>2.2.1</version.org.apache.maven.maven-plugin>
         <version.org.apache.maven.maven-settings>3.0.5</version.org.apache.maven.maven-settings>
-        <version.org.apache.maven.plugin-api>3.0.5</version.org.apache.maven.plugin-api>
+        <version.org.apache.maven.plugin-api>3.9.0</version.org.apache.maven.plugin-api>
         <version.org.apache.maven.plugin-tools>3.2</version.org.apache.maven.plugin-tools>
         <version.org.apache.maven.plugins.plugin>3.5.1</version.org.apache.maven.plugins.plugin>
         <version.org.apache.maven.plugins.site-plugin>3.12.1</version.org.apache.maven.plugins.site-plugin>
