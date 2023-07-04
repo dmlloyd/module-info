@@ -454,7 +454,9 @@ public class ModuleInfoCreator {
                 Map<String, ModuleRequire> requires = new HashMap<>();
                 if (addMandatory) {
                     log.info("Automatically adding mandatory \"java.base\" dependency");
-                    requires.put("java.base", new ModuleRequire("java.base", null, false, true, true, false));
+                    // We want the `java.base` to be added as non-synthetic
+                    // so that there are no problems to use it with JDK21+ (see https://bugs.openjdk.org/browse/JDK-8299769)
+                    requires.put("java.base", new ModuleRequire("java.base", null, false, false, true, false));
                 }
                 if (moduleInfo != null) {
                     List<ModuleRequire> list = moduleInfo.getRequires();
