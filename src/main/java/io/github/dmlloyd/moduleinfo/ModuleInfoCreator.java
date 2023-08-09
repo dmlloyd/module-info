@@ -25,8 +25,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.xml.stream.XMLStreamException;
@@ -67,6 +69,8 @@ public class ModuleInfoCreator {
     private boolean addPackages = true;
     @Parameter(names = "--add-exports", arity = 1)
     private boolean addExports = true;
+    @Parameter(names = "--export-excludes", arity = 1)
+    private String exportExcludes = "^.*\\b(internal|_private|private_)\\b.*$";
     @Parameter(names = "--detect-uses", arity = 1)
     private boolean detectUses = true;
     @Parameter(names = "--detect-provides", arity = 1)
@@ -147,6 +151,15 @@ public class ModuleInfoCreator {
 
     public ModuleInfoCreator setAddExports(final boolean addExports) {
         this.addExports = addExports;
+        return this;
+    }
+
+    public String getExportExcludes() {
+        return exportExcludes;
+    }
+
+    public ModuleInfoCreator setExportExcludes(String exportExcludes) {
+        this.exportExcludes = exportExcludes;
         return this;
     }
 
@@ -330,19 +343,18 @@ public class ModuleInfoCreator {
                         moduleVisitor.visitPackage(packageName.replace('.', '/'));
                     }
                 }
-                Map<String, ModuleExport> exports = new HashMap<>();
+                Map<String, ModuleExport> exports = new TreeMap<>();
                 if (addExports) {
-                    outer: for (String package_ : packages) {
+                    Pattern excludedPackages = Pattern.compile(exportExcludes);
+                    for (String package_ : packages) {
                         if (!exports.containsKey(package_)) {
-                            final List<String> list = Arrays.asList(package_.split("[./]"));
-                            for (String part : list) {
-                                if (part.equals("private_") || part.equals("_private") || part.equals("internal")) {
-                                    log.info("Not adding export for private package \"%s\"", package_.replace('/', '.'));
-                                    continue outer;
-                                }
+                            String normalizedPackageName = package_.replace('/', '.');
+                            if (excludedPackages.matcher(normalizedPackageName).matches()) {
+                                log.info("Not adding export for private package \"%s\"", normalizedPackageName);
+                            } else {
+                                log.info("Automatically adding export for package \"%s\"", normalizedPackageName);
+                                exports.put(package_, new ModuleExport(package_, Collections.emptyList(), false, false));
                             }
-                            log.info("Automatically adding export for package \"%s\"", package_.replace('/', '.'));
-                            exports.put(package_, new ModuleExport(package_, Collections.emptyList(), false, false));
                         }
                     }
                 }
@@ -350,23 +362,15 @@ public class ModuleInfoCreator {
                     List<ModuleExport> moduleInfoExports = moduleInfo.getExports();
                     if (moduleInfoExports != null) {
                         for (ModuleExport export : moduleInfoExports) {
-                            ModuleExport existing = exports.putIfAbsent(export.getPackage(), export);
-                            if (existing != null) {
-                                if (export.isSynthetic()) {
-                                    existing.setSynthetic(true);
+                            if (export.isPattern()) {
+                                Pattern packagePattern = Pattern.compile(export.getPackage());
+                                for (String package_ : packages) {
+                                    if (packagePattern.matcher(package_).matches()) {
+                                        addExport(export.withPackageName(package_), exports);
+                                    }
                                 }
-                                if (export.isMandated()) {
-                                    existing.setMandated(true);
-                                }
-                                List<String> to = existing.getTo();
-                                if (to == null || to.isEmpty()) {
-                                    existing.setTo(export.getTo());
-                                } else {
-                                    Set<String> set = new HashSet<>();
-                                    set.addAll(to);
-                                    set.addAll(export.getTo());
-                                    existing.setTo(new ArrayList<>(set));
-                                }
+                            } else {
+                                addExport(export, exports);
                             }
                         }
                     }
@@ -389,28 +393,20 @@ public class ModuleInfoCreator {
                     }
                     moduleVisitor.visitExport(export.getPackage().replace('.', '/'), flags, array);
                 }
-                Map<String, ModuleExport> opens = new HashMap<>();
+                Map<String, ModuleExport> opens = new TreeMap<>();
                 if (moduleInfo != null) {
                     List<ModuleExport> moduleInfoOpens = moduleInfo.getOpens();
                     if (moduleInfoOpens != null) {
-                        for (ModuleExport export : moduleInfoOpens) {
-                            ModuleExport existing = opens.putIfAbsent(export.getPackage(), export);
-                            if (existing != null) {
-                                if (export.isSynthetic()) {
-                                    existing.setSynthetic(true);
+                        for (ModuleExport openInfo : moduleInfoOpens) {
+                            if (openInfo.isPattern()) {
+                                Pattern packagePattern = Pattern.compile(openInfo.getPackage());
+                                for (String package_ : packages) {
+                                    if (packagePattern.matcher(package_).matches()) {
+                                        addExport(openInfo.withPackageName(package_), opens);
+                                    }
                                 }
-                                if (export.isMandated()) {
-                                    existing.setMandated(true);
-                                }
-                                List<String> to = existing.getTo();
-                                if (to == null || to.isEmpty()) {
-                                    existing.setTo(export.getTo());
-                                } else {
-                                    Set<String> set = new HashSet<>();
-                                    set.addAll(to);
-                                    set.addAll(export.getTo());
-                                    existing.setTo(new ArrayList<>(set));
-                                }
+                            } else {
+                                addExport(openInfo, opens);
                             }
                         }
                     }
@@ -503,11 +499,11 @@ public class ModuleInfoCreator {
                         moduleVisitor.visitRequire(require.getModule(), flags, require.getVersion());
                     }
                 }
-                Map<String, Set<String>> provides = new HashMap<>();
+                Map<String, List<String>> provides = new HashMap<>();
                 if (detectProvides) {
                     for (Map.Entry<String, List<String>> entry : detectedClassPathProvides.entrySet()) {
                         String serviceName = entry.getKey();
-                        Set<String> set = provides.computeIfAbsent(serviceName, ModuleInfoCreator::newLinkedHashSet);
+                        List<String> set = provides.computeIfAbsent(serviceName, ModuleInfoCreator::newList);
                         set.addAll(entry.getValue());
                     }
                 }
@@ -515,14 +511,19 @@ public class ModuleInfoCreator {
                     List<ModuleProvide> list = moduleInfo.getProvides();
                     if (list != null) {
                         for (ModuleProvide provide : list) {
-                            List<String> with = provide.getWith();
-                            if (with != null) {
-                                moduleVisitor.visitProvide(provide.getServiceType().replace('.', '/'),
-                                        with.stream().map(i -> i.replace('.', '/')).collect(Collectors.toList())
-                                                .toArray(NO_STRINGS));
+                            if (provide.getWith() != null) {
+                                String serviceName = provide.getServiceType();
+                                List<String> set = provides.computeIfAbsent(serviceName, ModuleInfoCreator::newList);
+                                set.addAll(provide.getWith());
                             }
                         }
                     }
+                }
+                for (Map.Entry<String, List<String>> provide : provides.entrySet()) {
+                    moduleVisitor.visitProvide(
+                            provide.getKey().replace('.', '/'),
+                            provide.getValue().stream().map(i -> i.replace('.', '/')).collect(Collectors.toList())
+                                    .toArray(NO_STRINGS));
                 }
                 if (moduleInfo != null) {
                     List<ModuleAnnotation> annotations = moduleInfo.getAnnotations();
@@ -545,6 +546,27 @@ public class ModuleInfoCreator {
             throw e;
         }
         log.info("Wrote module descriptor \"%s\"", mic);
+    }
+
+    private static void addExport(ModuleExport export, Map<String, ModuleExport> exports) {
+        ModuleExport existing = exports.putIfAbsent(export.getPackage(), export);
+        if (existing != null) {
+            if (export.isSynthetic()) {
+                existing.setSynthetic(true);
+            }
+            if (export.isMandated()) {
+                existing.setMandated(true);
+            }
+            List<String> to = existing.getTo();
+            if (to == null || to.isEmpty()) {
+                existing.setTo(export.getTo());
+            } else {
+                Set<String> set = new HashSet<>();
+                set.addAll(to);
+                set.addAll(export.getTo());
+                existing.setTo(new ArrayList<>(set));
+            }
+        }
     }
 
     private void processAnnotation(final ClassVisitor cv, final ModuleAnnotation annotation) {
