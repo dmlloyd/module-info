@@ -361,23 +361,15 @@ public class ModuleInfoCreator {
                     List<ModuleExport> moduleInfoExports = moduleInfo.getExports();
                     if (moduleInfoExports != null) {
                         for (ModuleExport export : moduleInfoExports) {
-                            ModuleExport existing = exports.putIfAbsent(export.getPackage(), export);
-                            if (existing != null) {
-                                if (export.isSynthetic()) {
-                                    existing.setSynthetic(true);
+                            if (export.isPattern()) {
+                                Pattern packagePattern = Pattern.compile(export.getPackage());
+                                for (String package_ : packages) {
+                                    if (packagePattern.matcher(package_).matches()) {
+                                        addExport(export.withPackageName(package_), exports);
+                                    }
                                 }
-                                if (export.isMandated()) {
-                                    existing.setMandated(true);
-                                }
-                                List<String> to = existing.getTo();
-                                if (to == null || to.isEmpty()) {
-                                    existing.setTo(export.getTo());
-                                } else {
-                                    Set<String> set = new HashSet<>();
-                                    set.addAll(to);
-                                    set.addAll(export.getTo());
-                                    existing.setTo(new ArrayList<>(set));
-                                }
+                            } else {
+                                addExport(export, exports);
                             }
                         }
                     }
@@ -404,24 +396,16 @@ public class ModuleInfoCreator {
                 if (moduleInfo != null) {
                     List<ModuleExport> moduleInfoOpens = moduleInfo.getOpens();
                     if (moduleInfoOpens != null) {
-                        for (ModuleExport export : moduleInfoOpens) {
-                            ModuleExport existing = opens.putIfAbsent(export.getPackage(), export);
-                            if (existing != null) {
-                                if (export.isSynthetic()) {
-                                    existing.setSynthetic(true);
+                        for (ModuleExport openInfo : moduleInfoOpens) {
+                            if (openInfo.isPattern()) {
+                                Pattern packagePattern = Pattern.compile(openInfo.getPackage());
+                                for (String package_ : packages) {
+                                    if (packagePattern.matcher(package_).matches()) {
+                                        addExport(openInfo.withPackageName(package_), opens);
+                                    }
                                 }
-                                if (export.isMandated()) {
-                                    existing.setMandated(true);
-                                }
-                                List<String> to = existing.getTo();
-                                if (to == null || to.isEmpty()) {
-                                    existing.setTo(export.getTo());
-                                } else {
-                                    Set<String> set = new HashSet<>();
-                                    set.addAll(to);
-                                    set.addAll(export.getTo());
-                                    existing.setTo(new ArrayList<>(set));
-                                }
+                            } else {
+                                addExport(openInfo, opens);
                             }
                         }
                     }
@@ -556,6 +540,27 @@ public class ModuleInfoCreator {
             throw e;
         }
         log.info("Wrote module descriptor \"%s\"", mic);
+    }
+
+    private static void addExport(ModuleExport export, Map<String, ModuleExport> exports) {
+        ModuleExport existing = exports.putIfAbsent(export.getPackage(), export);
+        if (existing != null) {
+            if (export.isSynthetic()) {
+                existing.setSynthetic(true);
+            }
+            if (export.isMandated()) {
+                existing.setMandated(true);
+            }
+            List<String> to = existing.getTo();
+            if (to == null || to.isEmpty()) {
+                existing.setTo(export.getTo());
+            } else {
+                Set<String> set = new HashSet<>();
+                set.addAll(to);
+                set.addAll(export.getTo());
+                existing.setTo(new ArrayList<>(set));
+            }
+        }
     }
 
     private void processAnnotation(final ClassVisitor cv, final ModuleAnnotation annotation) {

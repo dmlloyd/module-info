@@ -92,6 +92,8 @@ Exported packages are described as a list of objects with the following elements
 |===
 | Name | Description
 | `package` | The package name to export, as a string (required)
+| `pattern` | Defines if the `package` is a regular expression, as a boolean (optional), `false` by default.
+Allows to describe multiple packages (matching the pattern) to be exported/opened to the same list of target modules
 | `to` | A list of target module names to export the module to; if not given, the package is exported to all
 dependent modules (optional)
 |===

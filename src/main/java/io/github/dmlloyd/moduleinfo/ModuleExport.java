@@ -7,6 +7,7 @@ public class ModuleExport {
     private List<String> to;
     private boolean synthetic;
     private boolean mandated;
+    private boolean pattern = false;
 
     public ModuleExport() {
     }
@@ -16,6 +17,7 @@ public class ModuleExport {
         this.to = to;
         this.synthetic = synthetic;
         this.mandated = mandated;
+        this.pattern = false;
     }
 
     public String getPackage() {
@@ -48,5 +50,17 @@ public class ModuleExport {
 
     public void setMandated(final boolean mandated) {
         this.mandated = mandated;
+    }
+
+    public boolean isPattern() {
+        return pattern;
+    }
+
+    public void setPattern(boolean pattern) {
+        this.pattern = pattern;
+    }
+
+    public ModuleExport withPackageName(String package_) {
+        return new ModuleExport(package_, to, synthetic, mandated);
     }
 }
