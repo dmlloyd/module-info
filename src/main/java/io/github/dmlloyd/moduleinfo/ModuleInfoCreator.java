@@ -25,6 +25,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import java.util.regex.Pattern;
@@ -342,7 +343,7 @@ public class ModuleInfoCreator {
                         moduleVisitor.visitPackage(packageName.replace('.', '/'));
                     }
                 }
-                Map<String, ModuleExport> exports = new HashMap<>();
+                Map<String, ModuleExport> exports = new TreeMap<>();
                 if (addExports) {
                     Pattern excludedPackages = Pattern.compile(exportExcludes);
                     for (String package_ : packages) {
@@ -392,7 +393,7 @@ public class ModuleInfoCreator {
                     }
                     moduleVisitor.visitExport(export.getPackage().replace('.', '/'), flags, array);
                 }
-                Map<String, ModuleExport> opens = new HashMap<>();
+                Map<String, ModuleExport> opens = new TreeMap<>();
                 if (moduleInfo != null) {
                     List<ModuleExport> moduleInfoOpens = moduleInfo.getOpens();
                     if (moduleInfoOpens != null) {
