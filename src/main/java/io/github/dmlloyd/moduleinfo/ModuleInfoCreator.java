@@ -499,11 +499,11 @@ public class ModuleInfoCreator {
                         moduleVisitor.visitRequire(require.getModule(), flags, require.getVersion());
                     }
                 }
-                Map<String, Set<String>> provides = new HashMap<>();
+                Map<String, List<String>> provides = new HashMap<>();
                 if (detectProvides) {
                     for (Map.Entry<String, List<String>> entry : detectedClassPathProvides.entrySet()) {
                         String serviceName = entry.getKey();
-                        Set<String> set = provides.computeIfAbsent(serviceName, ModuleInfoCreator::newLinkedHashSet);
+                        List<String> set = provides.computeIfAbsent(serviceName, ModuleInfoCreator::newList);
                         set.addAll(entry.getValue());
                     }
                 }
@@ -511,14 +511,19 @@ public class ModuleInfoCreator {
                     List<ModuleProvide> list = moduleInfo.getProvides();
                     if (list != null) {
                         for (ModuleProvide provide : list) {
-                            List<String> with = provide.getWith();
-                            if (with != null) {
-                                moduleVisitor.visitProvide(provide.getServiceType().replace('.', '/'),
-                                        with.stream().map(i -> i.replace('.', '/')).collect(Collectors.toList())
-                                                .toArray(NO_STRINGS));
+                            if (provide.getWith() != null) {
+                                String serviceName = provide.getServiceType();
+                                List<String> set = provides.computeIfAbsent(serviceName, ModuleInfoCreator::newList);
+                                set.addAll(provide.getWith());
                             }
                         }
                     }
+                }
+                for (Map.Entry<String, List<String>> provide : provides.entrySet()) {
+                    moduleVisitor.visitProvide(
+                            provide.getKey().replace('.', '/'),
+                            provide.getValue().stream().map(i -> i.replace('.', '/')).collect(Collectors.toList())
+                                    .toArray(NO_STRINGS));
                 }
                 if (moduleInfo != null) {
                     List<ModuleAnnotation> annotations = moduleInfo.getAnnotations();
