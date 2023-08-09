@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.xml.stream.XMLStreamException;
@@ -67,6 +68,8 @@ public class ModuleInfoCreator {
     private boolean addPackages = true;
     @Parameter(names = "--add-exports", arity = 1)
     private boolean addExports = true;
+    @Parameter(names = "--export-excludes", arity = 1)
+    private String exportExcludes = "^.*\\b(internal|_private|private_)\\b.*$";
     @Parameter(names = "--detect-uses", arity = 1)
     private boolean detectUses = true;
     @Parameter(names = "--detect-provides", arity = 1)
@@ -147,6 +150,15 @@ public class ModuleInfoCreator {
 
     public ModuleInfoCreator setAddExports(final boolean addExports) {
         this.addExports = addExports;
+        return this;
+    }
+
+    public String getExportExcludes() {
+        return exportExcludes;
+    }
+
+    public ModuleInfoCreator setExportExcludes(String exportExcludes) {
+        this.exportExcludes = exportExcludes;
         return this;
     }
 
@@ -332,17 +344,16 @@ public class ModuleInfoCreator {
                 }
                 Map<String, ModuleExport> exports = new HashMap<>();
                 if (addExports) {
-                    outer: for (String package_ : packages) {
+                    Pattern excludedPackages = Pattern.compile(exportExcludes);
+                    for (String package_ : packages) {
                         if (!exports.containsKey(package_)) {
-                            final List<String> list = Arrays.asList(package_.split("[./]"));
-                            for (String part : list) {
-                                if (part.equals("private_") || part.equals("_private") || part.equals("internal")) {
-                                    log.info("Not adding export for private package \"%s\"", package_.replace('/', '.'));
-                                    continue outer;
-                                }
+                            String normalizedPackageName = package_.replace('/', '.');
+                            if (excludedPackages.matcher(normalizedPackageName).matches()) {
+                                log.info("Not adding export for private package \"%s\"", normalizedPackageName);
+                            } else {
+                                log.info("Automatically adding export for package \"%s\"", normalizedPackageName);
+                                exports.put(package_, new ModuleExport(package_, Collections.emptyList(), false, false));
                             }
-                            log.info("Automatically adding export for package \"%s\"", package_.replace('/', '.'));
-                            exports.put(package_, new ModuleExport(package_, Collections.emptyList(), false, false));
                         }
                     }
                 }

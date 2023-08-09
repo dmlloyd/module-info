@@ -266,11 +266,17 @@ The following properties are supported by the single `generate` goal, which is b
 *Default value is*: `true`
 
 *User property is*: `module-info.add-packages`
-| `<addExports>` | `boolean` | `1.0` | If set to `true`, all packages that do not contain a segment called `_private` or `internal` will be exported to dependents.
+| `<addExports>` | `boolean` | `1.0` | If set to `true`, all packages that do not contain a segment called `\_private`, `private_` or `internal` will be exported to dependents.
+Package filtering can be adjusted with the `exportExcludes` parameter.
 
 *Default value is*: `true`
 
 *User property is*: `module-info.add-exports`
+| `<exportExcludes>` | `String` | `2.2` | If `addExports` (`module-info.add-exports`) is set to `true`, this regexp will be used to determine if the package should be excluded.
+
+*Default value is*: `^.\*\b(internal\|\_private\|private_)\b.*$`
+
+*User property is*: `module-info.export-excludes`
 | `<moduleName>` | `String` | `1.0` | Specify the module name to use.  If not given, a module name is constructed from the project group and artifact ID.
 
 *User property is*: `module-info.module-name`

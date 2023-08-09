@@ -45,6 +45,9 @@ public class ModuleInfoMojo extends AbstractMojo {
     @Parameter(defaultValue = "true", property = "module-info.add-exports")
     private boolean addExports;
 
+    @Parameter(defaultValue = "^.*\\b(internal|_private|private_)\\b.*$", property = "module-info.export-excludes")
+    private String exportExcludes;
+
     @Parameter(defaultValue = "${project.artifactId}", required = true)
     private String moduleArtifactId;
 
@@ -82,6 +85,7 @@ public class ModuleInfoMojo extends AbstractMojo {
         }
         creator.setAddPackages(addPackages);
         creator.setAddExports(addExports);
+        creator.setExportExcludes(exportExcludes);
         creator.setAddMandatory(addMandatory);
         creator.setDetectUses(detectUses);
         creator.setDetectProvides(detectProvides);
