@@ -94,7 +94,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.3</version>
+                <version>3.6.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.ow2.asm</groupId>
