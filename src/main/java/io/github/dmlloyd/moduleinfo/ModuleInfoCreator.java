@@ -300,6 +300,12 @@ public class ModuleInfoCreator {
             if (name == null) {
                 throw new IllegalArgumentException("No module name given or detected");
             }
+            if (!name.matches(
+                    "\\p{javaJavaIdentifierStart}\\p{javaJavaIdentifierPart}*(\\.\\p{javaJavaIdentifierStart}\\p{javaJavaIdentifierPart}*)*")) {
+                Logger.getLogger().warn(
+                        "Module name \"%s\" is not a valid Java module name! This may cause run time problems for downstream users.",
+                        name);
+            }
             String version = this.moduleVersion;
             if (version == null && moduleInfo != null) {
                 version = moduleInfo.getVersion();
