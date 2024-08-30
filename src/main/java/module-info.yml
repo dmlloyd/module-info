@@ -1,4 +1,4 @@
-name: io.github.dmlloyd.module-info
+name: io.github.dmlloyd.module_info
 mainClass: io.github.dmlloyd.moduleinfo.ModuleInfoCreator
 opens:
   - package: io.github.dmlloyd.moduleinfo
