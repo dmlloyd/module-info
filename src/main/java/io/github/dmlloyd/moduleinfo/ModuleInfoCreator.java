@@ -285,7 +285,12 @@ public class ModuleInfoCreator {
         log.debug("Attempting to write \"%s\"", mic);
         try (OutputStream outputStream = Files.newOutputStream(mic)) {
             miWriter.visit(Opcodes.V9, Opcodes.ACC_MODULE, "module-info", null, null, null);
-            String sourceName = moduleInfoYml == null ? null : moduleInfoYml.getFileName().toString();
+            String sourceName;
+            if (moduleInfo != null && moduleInfo.getSourceFile() != null) {
+                sourceName = moduleInfo.getSourceFile();
+            } else {
+                sourceName = moduleInfoYml == null ? null : moduleInfoYml.getFileName().toString();
+            }
             miWriter.visitSource(sourceName, null);
             String name = moduleName;
             if (name == null && moduleInfo != null) {
