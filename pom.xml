@@ -51,7 +51,7 @@
         <version.org.apache.maven.plugins.maven-dependency-plugin>2.6</version.org.apache.maven.plugins.maven-dependency-plugin>
         <version.org.apache.maven.shared.maven-filtering>3.4.0</version.org.apache.maven.shared.maven-filtering>
         <version.org.codehaus.plexus.plexus-utils>4.0.2</version.org.codehaus.plexus.plexus-utils>
-        <version.org.ow2.asm>9.7.1</version.org.ow2.asm>
+        <version.org.ow2.asm>9.8</version.org.ow2.asm>
         <version.org.yaml.snakeyaml>2.4</version.org.yaml.snakeyaml>
 
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -99,7 +99,7 @@
                     <dependency>
                         <groupId>org.ow2.asm</groupId>
                         <artifactId>asm</artifactId>
-                        <version>9.7.1</version>
+                        <version>9.8</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -165,7 +165,7 @@
                     <dependency>
                         <groupId>org.ow2.asm</groupId>
                         <artifactId>asm</artifactId>
-                        <version>9.7.1</version>
+                        <version>9.8</version>
                     </dependency>
                 </dependencies>
                 <executions>
