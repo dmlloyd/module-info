@@ -28,7 +28,7 @@
 
     <groupId>io.github.dmlloyd.module-info</groupId>
     <artifactId>module-info</artifactId>
-    <version>2.2-SNAPSHOT</version>
+    <version>2.2</version>
     <packaging>maven-plugin</packaging>
 
     <name>Module Info Generator</name>
