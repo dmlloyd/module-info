@@ -10,16 +10,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: build with JDK 11
+    name: Build project
 
     steps:
       - uses: actions/checkout@v2
         name: checkout
 
-      - uses: AdoptOpenJDK/install-jdk@v1
-        name: set up JDK 11
+      - uses: actions/setup-java@v5
+        name: set up JDK
         with:
-          version: 11
+          distribution: temurin
+          architecture: x64
+          java-version: 17
 
       - name: bootstrap build
         run: mvn -B install --file pom.xml -Dbootstrap
