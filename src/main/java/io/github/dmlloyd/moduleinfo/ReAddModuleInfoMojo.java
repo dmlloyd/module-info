@@ -22,7 +22,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 /**
  * A mojo to re-add the deleted {@code module-info.class} file.
  */
-@Mojo(name = "re-add", defaultPhase = LifecyclePhase.PACKAGE)
+@Mojo(name = "re-add", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true)
 public class ReAddModuleInfoMojo extends AbstractMojo {
     @Parameter(property = "module-info.jar-file", defaultValue = "${project.build.directory}/${project.build.finalName}.jar", required = true)
     private File jarFile;
