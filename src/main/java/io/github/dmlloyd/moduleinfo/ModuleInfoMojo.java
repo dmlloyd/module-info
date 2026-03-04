@@ -15,7 +15,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 /**
  */
-@Mojo(name = "generate", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
+@Mojo(name = "generate", defaultPhase = LifecyclePhase.PROCESS_CLASSES, threadSafe = true)
 public class ModuleInfoMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "false", property = "module-info.skip")
