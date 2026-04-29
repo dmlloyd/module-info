@@ -34,9 +34,10 @@
     <name>Module Info Generator</name>
     <description>A utility for writing module-info.class files based on YAML and automatic input</description>
     <parent>
-        <groupId>io.smallrye</groupId>
-        <artifactId>smallrye-build-parent</artifactId>
-        <version>48</version>
+        <groupId>org.jboss</groupId>
+        <artifactId>jboss-parent</artifactId>
+        <version>53</version>
+        <relativePath/>
     </parent>
 
     <properties>
@@ -54,8 +55,7 @@
         <version.org.ow2.asm>9.9.1</version.org.ow2.asm>
         <version.org.yaml.snakeyaml>2.6</version.org.yaml.snakeyaml>
 
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.release>8</maven.compiler.release>
     </properties>
 
     <reporting>
@@ -191,16 +191,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.sonatype.central</groupId>
-                <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>0.10.0</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <publishingServerId>central</publishingServerId>
-                    <autoPublish>true</autoPublish>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
@@ -234,32 +224,6 @@
                                 <phase>package</phase>
                                 <goals>
                                     <goal>re-add</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>release</id>
-            <activation>
-                <property>
-                    <name>release</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.2.8</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
                                 </goals>
                             </execution>
                         </executions>
