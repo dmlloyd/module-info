@@ -21,7 +21,7 @@ jobs:
         with:
           distribution: temurin
           architecture: x64
-          java-version: 17
+          java-version: 25
 
       - name: bootstrap build
         run: mvn -B install --file pom.xml -Dbootstrap
