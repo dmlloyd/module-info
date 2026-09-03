@@ -53,7 +53,7 @@
         <version.org.apache.maven.shared.maven-filtering>3.5.1</version.org.apache.maven.shared.maven-filtering>
         <version.org.codehaus.plexus.plexus-utils>4.1.0</version.org.codehaus.plexus.plexus-utils>
         <version.org.ow2.asm>9.10.1</version.org.ow2.asm>
-        <version.org.yaml.snakeyaml>2.6</version.org.yaml.snakeyaml>
+        <version.org.yaml.snakeyaml>2.7</version.org.yaml.snakeyaml>
 
         <maven.compiler.release>8</maven.compiler.release>
     </properties>
